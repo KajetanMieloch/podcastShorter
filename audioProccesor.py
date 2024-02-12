@@ -7,16 +7,34 @@ def saveAudio(file):
     audio.write_audiofile("output.wav")
     clip.close()
     
-def transcriptAudio():
+def transcriptAudioWithTimestamps(audio_file):
     recognizer = sr.Recognizer()
-    audio = sr.AudioFile("output.wav")
+
+    # Load audio file
+    audio = sr.AudioFile(audio_file)
     
     with audio as source:
-        audio = recognizer.record(source)
+        audio_data = recognizer.record(source)
         
     try:
-        text = recognizer.recognize_google(audio, language="pl-PL")
-        print("Text:", text)
+        # Recognize audio with timestamps
+        result = recognizer.recognize_google(audio_data, show_all=True, language="pl-PL")
+        
+        # Extract text and timestamps from the result
+        subtitles = []
+        for alternative in result['alternative']:
+            text = alternative['transcript']
+            
+            # Check if 'timestamps' key exists
+            if 'timestamps' in alternative:
+                for word, start_time, end_time in alternative['timestamps']:
+                    subtitles.append((start_time, end_time, word))
+            else:
+                # Handle missing timestamps
+                print("No timestamps found for alternative:", text)
+        
+        return subtitles
+        
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand the audio.")
     except sr.RequestError as e:
