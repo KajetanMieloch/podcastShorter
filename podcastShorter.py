@@ -13,9 +13,7 @@ file = sys.argv[1]
 ####AUDIO####
 audioProccesor.saveAudio(file)
 audio = AudioFileClip("output.wav")
-
-subtitles = audioProccesor.transcriptAudioWithTimestamps("record.wav")
-
+audioProccesor.transcriptAudio()
 
 
 ####VIDEO####
@@ -29,4 +27,4 @@ final.write_videofile("short.mp4")
 
 
 os.remove("output.avi")
-#os.remove("output.wav")
+os.remove("output.wav")
