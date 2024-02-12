@@ -10,14 +10,21 @@ if len(sys.argv) != 2:
 
 file = sys.argv[1]
 
-videoProcessor.saveVideo(file)
+####AUDIO####
 audioProccesor.saveAudio(file)
-
-video = VideoFileClip("output.avi")
 audio = AudioFileClip("output.wav")
+audioProccesor.transcriptAudio()
+
+
+####VIDEO####
+videoProcessor.saveVideo(file)
+video = VideoFileClip("output.avi")
+
+
 
 final = video.set_audio(audio)
 final.write_videofile("short.mp4")
+
 
 os.remove("output.avi")
 os.remove("output.wav")
